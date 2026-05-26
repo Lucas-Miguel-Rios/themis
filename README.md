@@ -1,16 +1,46 @@
-# React + Vite
+# ⚖️ Themis — Inteligência Jurídica
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sistema de IA Jurídica para auxiliar advogados na geração de petições processuais e gestão de prazos.
 
-Currently, two official plugins are available:
+## 🚀 Funcionalidades
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Gerador de Petições** — Descreva os fatos do caso e a IA gera a peça processual completa e formatada
+- **Gestão de Prazos** — Cadastre prazos processuais e acompanhe os dias restantes com alertas visuais
+- **Múltiplas áreas do Direito** — Civil, Consumidor, Trabalhista, Penal e Família
+- **Interface profissional** — Dashboard limpo e intuitivo pensado para advogados
 
-## React Compiler
+## 🛠️ Tecnologias
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React + Vite
+- Tailwind CSS
+- Gemini AI API (Google)
+- React Markdown
 
-## Expanding the ESLint configuration
+## 📦 Como rodar o projeto
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+# Clone o repositório
+git clone https://github.com/Lucas-Miguel-Rios/themis.git
+
+# Entre na pasta
+cd themis
+
+# Instale as dependências
+npm install
+
+# Crie o arquivo .env com sua chave
+VITE_GEMINI_KEY=sua_chave_aqui
+
+# Rode o projeto
+npm run dev
+```
+
+## 🔑 Variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto com:
+
+## 👨‍💻 Autor
+
+Lucas Miguel Moreno Rios  
+Estudante de Ciência da Computação — FIB Bauru  
+[GitHub](https://github.com/Lucas-Miguel-Rios)
