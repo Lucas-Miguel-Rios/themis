@@ -36,7 +36,7 @@ npm run dev
 ```
 
 ## 🔑 Variáveis de ambiente
-
+VITE_GEMINI_KEY=sua_chave_da_api_gemini
 Crie um arquivo `.env` na raiz do projeto com:
 
 ## 👨‍💻 Autor
