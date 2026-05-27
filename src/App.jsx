@@ -1,6 +1,7 @@
 import { useState } from "react"
 import ReactMarkdown from "react-markdown"
 import jsPDF from "jspdf"
+import Prazos from "./components/Prazos"
 
 function App() {
   const [fatos, setFatos] = useState("")
