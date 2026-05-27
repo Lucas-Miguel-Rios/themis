@@ -2,6 +2,8 @@ import { useState } from "react"
 import ReactMarkdown from "react-markdown"
 import jsPDF from "jspdf"
 import Prazos from "./components/Prazos"
+import { Document, Packer, Paragraph, TextRun } from "docx"
+import { saveAs } from "file-saver"
 
 function App() {
   const [fatos, setFatos] = useState("")
@@ -60,6 +62,41 @@ function App() {
     })
     doc.save("peticao-themis.pdf")
   }
+  async function exportarWord() {
+  const paragrafos = peticao.split("\n").map((linha) => {
+    return new Paragraph({
+      children: [
+        new TextRun({
+          text: linha,
+          size: 24,
+          font: "Times New Roman",
+        }),
+      ],
+      spacing: { after: 200 },
+    })
+  })
+
+  const doc = new Document({
+    sections: [
+      {
+        properties: {
+          page: {
+            margin: {
+              top: 1440,
+              right: 1440,
+              bottom: 1440,
+              left: 1800,
+            },
+          },
+        },
+        children: paragrafos,
+      },
+    ],
+  })
+
+  const blob = await Packer.toBlob(doc)
+  saveAs(blob, "peticao-themis.docx")
+}
 
   return (
     <div className="flex min-h-screen bg-zinc-950 text-zinc-100">
@@ -149,6 +186,9 @@ function App() {
               <div className="flex gap-3 mb-4">
                 <button onClick={exportarPDF} className="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors">
                   📄 Exportar PDF
+                </button>
+                <button onClick={exportarWord} className="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors">
+                  📝 Exportar Word
                 </button>
               </div>
               <div className="text-sm text-zinc-200 leading-relaxed prose prose-invert max-w-none">
