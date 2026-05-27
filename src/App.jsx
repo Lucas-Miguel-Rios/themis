@@ -1,6 +1,5 @@
 import { useState } from "react"
 import ReactMarkdown from "react-markdown"
-import Prazos from "./components/Prazos"
 import jsPDF from "jspdf"
 
 function App() {
@@ -24,7 +23,7 @@ function App() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            contents: [{ parts: [{ text: `Você é um assistante jurídico especializado no Direito Brasileiro. Gere uma ${tipoPeca} completa e profissional para a área de ${areaDireito}. Baseie-se nos seguintes fatos: ${fatos}. Siga a formatação padrão da OAB, cite artigos de lei e jurisprudência relevante.` }] }]
+            contents: [{ parts: [{ text: `Você é um assistente jurídico especializado no Direito Brasileiro. Gere uma ${tipoPeca} completa e profissional para a área de ${areaDireito}. Baseie-se nos seguintes fatos: ${fatos}. Siga a formatação padrão da OAB, cite artigos de lei e jurisprudência relevante.` }] }]
           })
         }
       )
@@ -36,6 +35,29 @@ function App() {
       console.error(erro)
     }
     setCarregando(false)
+  }
+
+  function exportarPDF() {
+    const doc = new jsPDF()
+    const margemEsquerda = 15
+    const margemSuperior = 20
+    const larguraMaxima = 180
+    const tamanhoFonte = 11
+    doc.setFont("times", "normal")
+    doc.setFontSize(tamanhoFonte)
+    const linhas = doc.splitTextToSize(peticao, larguraMaxima)
+    let posicaoY = margemSuperior
+    const alturaLinha = 7
+    const alturaMaximaPagina = 270
+    linhas.forEach((linha) => {
+      if (posicaoY + alturaLinha > alturaMaximaPagina) {
+        doc.addPage()
+        posicaoY = margemSuperior
+      }
+      doc.text(linha, margemEsquerda, posicaoY)
+      posicaoY += alturaLinha
+    })
+    doc.save("peticao-themis.pdf")
   }
 
   return (
@@ -55,9 +77,11 @@ function App() {
           <button className="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-400 text-sm hover:bg-zinc-800">📁 Processos</button>
         </nav>
       </aside>
+
       <main className="flex-1 p-10 overflow-y-auto">
         <h2 className="text-3xl font-bold text-zinc-100">Dashboard</h2>
         <p className="text-zinc-500 mt-1">Bem-vindo ao Themis</p>
+
         <div className="grid grid-cols-4 gap-4 mt-8">
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
             <p className="text-xs text-zinc-500 uppercase tracking-widest">Petições geradas</p>
@@ -80,6 +104,7 @@ function App() {
             <p className="text-xs text-zinc-500 mt-1">STJ · TJSP · STF</p>
           </div>
         </div>
+
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mt-6">
           <h3 className="text-lg font-bold text-zinc-100 mb-4">⚖️ Gerador de Petição</h3>
           <div className="grid grid-cols-2 gap-4 mb-4">
@@ -104,6 +129,7 @@ function App() {
               </select>
             </div>
           </div>
+
           <p className="text-xs text-zinc-500 uppercase tracking-widest mb-2">Descreva os fatos do caso</p>
           <textarea
             className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-zinc-100 h-36 resize-none"
@@ -111,16 +137,26 @@ function App() {
             value={fatos}
             onChange={(e) => setFatos(e.target.value)}
           />
+
           <button onClick={gerarPeticao} disabled={carregando} className="mt-4 w-full bg-yellow-600 hover:bg-yellow-500 disabled:opacity-50 text-zinc-950 font-bold py-3 rounded-lg text-sm transition-colors">
             {carregando ? "⏳ Gerando petição..." : "⚖️ Gerar Petição com IA"}
           </button>
+
           {peticao && (
             <div className="mt-6 bg-zinc-800 border border-zinc-700 rounded-lg p-5">
               <p className="text-xs text-yellow-500 uppercase tracking-widest mb-3">✅ Petição gerada</p>
-              <div className="text-sm text-zinc-200 leading-relaxed prose prose-invert max-w-none"><ReactMarkdown>{peticao}</ReactMarkdown></div>
+              <div className="flex gap-3 mb-4">
+                <button onClick={exportarPDF} className="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors">
+                  📄 Exportar PDF
+                </button>
+              </div>
+              <div className="text-sm text-zinc-200 leading-relaxed prose prose-invert max-w-none">
+                <ReactMarkdown>{peticao}</ReactMarkdown>
+              </div>
             </div>
           )}
         </div>
+
         <Prazos />
       </main>
     </div>
