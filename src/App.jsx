@@ -16,11 +16,14 @@ function App() {
   const [carregando, setCarregando] = useState(false)
   const [tela, setTela] = useState("dashboard")
   const [totalPeticoes, setTotalPeticoes] = useState(0)
+  const [totalPrazos, setTotalPrazos] = useState(0)
 
   useEffect(() => {
   const historico = JSON.parse(localStorage.getItem("themis_historico") || "[]")
+  const prazos = JSON.parse(localStorage.getItem("themis_prazos") || "[]")
   setTotalPeticoes(historico.length)
-}, [])
+  setTotalPrazos(prazos.length)
+}, [tela])
 
   async function gerarPeticao() {
     if (!fatos.trim()) {
@@ -143,7 +146,7 @@ function App() {
               </div>
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
                 <p className="text-xs text-zinc-500 uppercase tracking-widest">Prazos ativos</p>
-                <p className="text-4xl font-bold text-yellow-500 mt-2">8</p>
+                <p className="text-4xl font-bold text-yellow-500 mt-2">{totalPrazos}</p>
                 <p className="text-xs text-orange-400 mt-1">⚠ 2 urgentes</p>
               </div>
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">

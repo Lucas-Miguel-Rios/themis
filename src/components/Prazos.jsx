@@ -1,9 +1,19 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 function Prazos() {
   const [prazos, setPrazos] = useState([])
   const [nome, setNome] = useState("")
   const [data, setData] = useState("")
+
+  useEffect(() => {
+    const salvos = JSON.parse(localStorage.getItem("themis_prazos") || "[]")
+    setPrazos(salvos)
+  }, [])
+
+  function salvar(novaLista) {
+    localStorage.setItem("themis_prazos", JSON.stringify(novaLista))
+    setPrazos(novaLista)
+  }
 
   function calcularDias(dataLimite) {
     const hoje = new Date()
@@ -18,13 +28,13 @@ function Prazos() {
       return
     }
     const novoPrazo = { id: Date.now(), nome, data }
-    setPrazos([...prazos, novoPrazo])
+    salvar([...prazos, novoPrazo])
     setNome("")
     setData("")
   }
 
   function removerPrazo(id) {
-    setPrazos(prazos.filter((p) => p.id !== id))
+    salvar(prazos.filter((p) => p.id !== id))
   }
 
   function corDoCard(dias) {
@@ -43,7 +53,6 @@ function Prazos() {
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mt-6">
       <h3 className="text-lg font-bold text-zinc-100 mb-4">📅 Gestão de Prazos</h3>
 
-      {/* Formulário */}
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="col-span-2">
           <p className="text-xs text-zinc-500 uppercase tracking-widest mb-2">Nome do processo</p>
@@ -72,7 +81,6 @@ function Prazos() {
         + Adicionar Prazo
       </button>
 
-      {/* Lista de prazos */}
       {prazos.length === 0 ? (
         <p className="text-zinc-600 text-sm text-center py-4">Nenhum prazo cadastrado ainda.</p>
       ) : (
