@@ -5,6 +5,7 @@ import Prazos from "./components/Prazos"
 import Historico, { salvarPeticaoNoHistorico } from "./components/Historico"
 import { Document, Packer, Paragraph, TextRun } from "docx"
 import { saveAs } from "file-saver"
+import Multas from "./components/Multas"
 
 
 
@@ -130,6 +131,7 @@ function App() {
           <span className="text-xs text-zinc-600 uppercase tracking-widest mb-1 mt-4">Gestão</span>
           <button onClick={() => setTela("prazos")} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${tela === "prazos" ? "bg-yellow-600/10 text-yellow-500" : "text-zinc-400 hover:bg-zinc-800"}`}>📅 Prazos</button>
           <button className="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-400 text-sm hover:bg-zinc-800">📁 Processos</button>
+          <button onClick={() => setTela("multas")} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${tela === "multas" ? "bg-yellow-600/10 text-yellow-500" : "text-zinc-400 hover:bg-zinc-800"}`}>🚦 Multas</button>
         </nav>
       </aside>
 
@@ -230,6 +232,14 @@ function App() {
             <h2 className="text-3xl font-bold text-zinc-100">Prazos</h2>
             <p className="text-zinc-500 mt-1">Gerencie seus prazos processuais</p>
             <Prazos />
+          </>
+        )}
+        
+        {tela === "multas" && (
+          <>
+            <h2 className="text-3xl font-bold text-zinc-100">Contestação de Multas</h2>
+            <p className="text-zinc-500 mt-1">Gere recursos administrativos com IA</p>
+            <Multas />
           </>
         )}
       </main>
