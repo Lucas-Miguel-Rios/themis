@@ -6,6 +6,7 @@ import Historico, { salvarPeticaoNoHistorico } from "./components/Historico"
 import { Document, Packer, Paragraph, TextRun } from "docx"
 import { saveAs } from "file-saver"
 import Multas from "./components/Multas"
+import Disclaimer from "./components/Disclaimer"
 
 
 
@@ -171,6 +172,7 @@ function App() {
             <p className="text-zinc-500 mt-1">Gere peças jurídicas com IA</p>
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mt-6">
               <h3 className="text-lg font-bold text-zinc-100 mb-4">⚖️ Gerador de Petição</h3>
+              <Disclaimer tipo="peticao" />
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
                   <p className="text-xs text-zinc-500 uppercase tracking-widest mb-2">Tipo de Peça</p>

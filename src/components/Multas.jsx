@@ -2,6 +2,7 @@ import { useState } from "react"
 import jsPDF from "jspdf"
 import { Document, Packer, Paragraph, TextRun } from "docx"
 import { saveAs } from "file-saver"
+import Disclaimer from "./Disclaimer"
 
 const SYSTEM_PROMPT = `Você é um assistente jurídico especializado em direito de trânsito brasileiro. 
 Sua função é analisar autos de infração de trânsito e gerar recursos administrativos tecnicamente fundamentados.
@@ -288,6 +289,7 @@ Estruture com: Identificação, Da Negativa Recorrida, Das Razões do Recurso, D
           </button>
         )}
       </div>
+      <Disclaimer tipo="multa" />
 
       {/* ETAPA: INICIO */}
       {etapa === "inicio" && (
