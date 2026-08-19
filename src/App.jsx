@@ -7,7 +7,7 @@ import { Document, Packer, Paragraph, TextRun } from "docx"
 import { saveAs } from "file-saver"
 import Multas from "./components/Multas"
 import Disclaimer from "./components/Disclaimer"
-
+import { LayoutDashboard, FileText, Clock, AlertTriangle, Folder, History } from "lucide-react"
 
 
 function App() {
@@ -21,11 +21,11 @@ function App() {
   const [totalPrazos, setTotalPrazos] = useState(0)
 
   useEffect(() => {
-  const historico = JSON.parse(localStorage.getItem("themis_historico") || "[]")
-  const prazos = JSON.parse(localStorage.getItem("themis_prazos") || "[]")
-  setTotalPeticoes(historico.length)
-  setTotalPrazos(prazos.length)
-}, [tela])
+    const historico = JSON.parse(localStorage.getItem("themis_historico") || "[]")
+    const prazos = JSON.parse(localStorage.getItem("themis_prazos") || "[]")
+    setTotalPeticoes(historico.length)
+    setTotalPrazos(prazos.length)
+  }, [tela])
 
   async function gerarPeticao() {
     if (!fatos.trim()) {
@@ -121,18 +121,44 @@ function App() {
     <div className="flex min-h-screen bg-zinc-950 text-zinc-100">
       <aside className="w-60 bg-zinc-900 border-r border-zinc-800 flex flex-col p-6">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-yellow-600 tracking-widest">THEMIS</h1>
-          <p className="text-xs text-zinc-500 tracking-widest mt-1">INTELIGÊNCIA JURÍDICA</p>
+          <div className="flex items-center gap-3">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <circle cx="14" cy="6" r="2.5" fill="#ca8a04" />
+              <line x1="14" y1="8.5" x2="14" y2="18" stroke="#ca8a04" strokeWidth="1.5" />
+              <line x1="4" y1="18" x2="24" y2="18" stroke="#ca8a04" strokeWidth="1.5" strokeLinecap="round" />
+              <line x1="14" y1="11" x2="5" y2="14" stroke="#ca8a04" strokeWidth="1.2" />
+              <line x1="14" y1="11" x2="23" y2="14" stroke="#ca8a04" strokeWidth="1.2" />
+              <ellipse cx="5" cy="14.5" rx="4" ry="1.5" fill="#ca8a04" opacity="0.7" />
+              <ellipse cx="23" cy="14.5" rx="4" ry="1.5" fill="#ca8a04" opacity="0.7" />
+            </svg>
+            <div>
+              <h1 className="text-xl font-bold text-yellow-600 tracking-widest leading-none">THEMIS</h1>
+              <p className="text-xs text-zinc-500 tracking-widest mt-1">INTELIGÊNCIA JURÍDICA</p>
+            </div>
+          </div>
         </div>
-        <nav className="flex flex-col gap-2">
-          <span className="text-xs text-zinc-600 uppercase tracking-widest mb-1">Principal</span>
-          <button onClick={() => setTela("dashboard")} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${tela === "dashboard" ? "bg-yellow-600/10 text-yellow-500" : "text-zinc-400 hover:bg-zinc-800"}`}>⚖️ Dashboard</button>
-          <button onClick={() => setTela("peticoes")} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${tela === "peticoes" ? "bg-yellow-600/10 text-yellow-500" : "text-zinc-400 hover:bg-zinc-800"}`}>📄 Petições</button>
-          <button onClick={() => setTela("historico")} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${tela === "historico" ? "bg-yellow-600/10 text-yellow-500" : "text-zinc-400 hover:bg-zinc-800"}`}>🕘 Histórico</button>
-          <span className="text-xs text-zinc-600 uppercase tracking-widest mb-1 mt-4">Gestão</span>
-          <button onClick={() => setTela("prazos")} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${tela === "prazos" ? "bg-yellow-600/10 text-yellow-500" : "text-zinc-400 hover:bg-zinc-800"}`}>📅 Prazos</button>
-          <button className="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-400 text-sm hover:bg-zinc-800">📁 Processos</button>
-          <button onClick={() => setTela("multas")} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${tela === "multas" ? "bg-yellow-600/10 text-yellow-500" : "text-zinc-400 hover:bg-zinc-800"}`}>🚦 Multas</button>
+        <nav className="flex flex-col gap-1">
+          <span className="text-xs text-zinc-600 uppercase tracking-widest mb-2">Principal</span>
+          <button onClick={() => setTela("dashboard")} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${tela === "dashboard" ? "bg-yellow-600/10 text-yellow-500" : "text-zinc-400 hover:bg-zinc-800"}`}>
+            <LayoutDashboard size={16} /> Dashboard
+          </button>
+          <button onClick={() => setTela("peticoes")} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${tela === "peticoes" ? "bg-yellow-600/10 text-yellow-500" : "text-zinc-400 hover:bg-zinc-800"}`}>
+            <FileText size={16} /> Petições
+          </button>
+          <button onClick={() => setTela("historico")} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${tela === "historico" ? "bg-yellow-600/10 text-yellow-500" : "text-zinc-400 hover:bg-zinc-800"}`}>
+            <History size={16} /> Histórico
+          </button>
+
+          <span className="text-xs text-zinc-600 uppercase tracking-widest mb-2 mt-4">Gestão</span>
+          <button onClick={() => setTela("prazos")} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${tela === "prazos" ? "bg-yellow-600/10 text-yellow-500" : "text-zinc-400 hover:bg-zinc-800"}`}>
+            <Clock size={16} /> Prazos
+          </button>
+          <button onClick={() => setTela("multas")} className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${tela === "multas" ? "bg-yellow-600/10 text-yellow-500" : "text-zinc-400 hover:bg-zinc-800"}`}>
+            <AlertTriangle size={16} /> Multas
+          </button>
+          <button className="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-400 text-sm hover:bg-zinc-800 transition-colors">
+            <Folder size={16} /> Processos
+          </button>
         </nav>
       </aside>
 
@@ -236,7 +262,7 @@ function App() {
             <Prazos />
           </>
         )}
-        
+
         {tela === "multas" && (
           <>
             <h2 className="text-3xl font-bold text-zinc-100">Contestação de Multas</h2>
