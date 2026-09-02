@@ -7,7 +7,10 @@ import { Document, Packer, Paragraph, TextRun } from "docx"
 import { saveAs } from "file-saver"
 import Multas from "./components/Multas"
 import Disclaimer from "./components/Disclaimer"
-import { LayoutDashboard, FileText, Clock, AlertTriangle, Folder, History } from "lucide-react"
+import { LayoutDashboard, FileText, Clock, AlertTriangle, Folder, History, LogOut } from "lucide-react"
+import { supabase } from "./supabase"
+import Login from "./components/Login"
+
 
 
 function App() {
@@ -19,6 +22,45 @@ function App() {
   const [tela, setTela] = useState("dashboard")
   const [totalPeticoes, setTotalPeticoes] = useState(0)
   const [totalPrazos, setTotalPrazos] = useState(0)
+  const [usuario, setUsuario] = useState(null)
+  const [dadosTrabalhistas, setDadosTrabalhistas] = useState({
+    nomeTrabalhador: "",
+    cpf: "",
+    cargo: "",
+    salario: "",
+
+    empresa: "",
+    cnpj: "",
+    cidade: "",
+    estado: "",
+
+    dataAdmissao: "",
+    dataDemissao: "",
+    motivoDemissao: "",
+
+    recebeuVerbasRescisorias: "",
+    recebeuAvisoPrevio: "",
+    recebeuDecimoTerceiro: "",
+    recebeuFerias: "",
+    recebeuFGTS: "",
+    recebeuMultaFGTS: "",
+
+    horasExtras: "",
+    horasPorDia: "",
+    trabalhoFimSemana: "",
+  })
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUsuario(session?.user ?? null)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUsuario(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
 
   useEffect(() => {
     const historico = JSON.parse(localStorage.getItem("themis_historico") || "[]")
@@ -117,7 +159,12 @@ function App() {
     setTela("peticoes")
   }
 
+  async function logout() {
+    await supabase.auth.signOut()
+  }
+  if (!usuario) return <Login />
   return (
+
     <div className="flex min-h-screen bg-zinc-950 text-zinc-100">
       <aside className="w-60 bg-zinc-900 border-r border-zinc-800 flex flex-col p-6">
         <div className="mb-8">
@@ -160,6 +207,19 @@ function App() {
             <Folder size={16} /> Processos
           </button>
         </nav>
+        <div className="mt-auto pt-4 border-t border-zinc-700">
+          <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-3 mb-2">
+            <p className="text-xs text-zinc-400 font-semibold truncate">{usuario?.email}</p>
+            <p className="text-xs text-zinc-600 mt-0.5">Plano Gratuito</p>
+          </div>
+          <button
+            onClick={logout}
+            className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-all"
+          >
+            <LogOut size={14} /> Sair da conta
+          </button>
+        </div>
+
       </aside>
 
       <main className="flex-1 p-10 overflow-y-auto">
@@ -221,6 +281,105 @@ function App() {
                   </select>
                 </div>
               </div>
+              {/* =========================================================
+                DADOS ESPECÍFICOS DO DIREITO TRABALHISTA
+                Esses campos só aparecem quando a área selecionada
+                for "Direito Trabalhista".
+                ========================================================= */}
+              {areaDireito === "Direito Trabalhista" && (
+                <div className="mt-6 p-5 rounded-xl border border-zinc-700 bg-zinc-900/50">
+
+                  {/* Título da seção */}
+                  <h3 className="text-sm font-semibold text-yellow-500 uppercase tracking-widest mb-4">
+                    Dados do Trabalhador
+                  </h3>
+
+                  {/* Campos organizados em duas colunas */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    {/* Nome completo */}
+                    <div>
+                      <label className="block text-xs text-zinc-500 uppercase tracking-widest mb-2">
+                        Nome completo
+                      </label>
+
+                      <input
+                        type="text"
+                        value={dadosTrabalhistas.nomeTrabalhador}
+                        onChange={(e) =>
+                          setDadosTrabalhistas({
+                            ...dadosTrabalhistas,
+                            nomeTrabalhador: e.target.value
+                          })
+                        }
+                        placeholder="Ex: João da Silva"
+                        className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-white outline-none focus:border-yellow-500"
+                      />
+                    </div>
+
+                    {/* CPF */}
+                    <div>
+                      <label className="block text-xs text-zinc-500 uppercase tracking-widest mb-2">
+                        CPF
+                      </label>
+
+                      <input
+                        type="text"
+                        value={dadosTrabalhistas.cpf}
+                        onChange={(e) =>
+                          setDadosTrabalhistas({
+                            ...dadosTrabalhistas,
+                            cpf: e.target.value
+                          })
+                        }
+                        placeholder="Ex: 000.000.000-00"
+                        className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-white outline-none focus:border-yellow-500"
+                      />
+                    </div>
+
+                    {/* Cargo */}
+                    <div>
+                      <label className="block text-xs text-zinc-500 uppercase tracking-widest mb-2">
+                        Cargo / função
+                      </label>
+
+                      <input
+                        type="text"
+                        value={dadosTrabalhistas.cargo}
+                        onChange={(e) =>
+                          setDadosTrabalhistas({
+                            ...dadosTrabalhistas,
+                            cargo: e.target.value
+                          })
+                        }
+                        placeholder="Ex: Auxiliar administrativo"
+                        className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-white outline-none focus:border-yellow-500"
+                      />
+                    </div>
+
+                    {/* Salário */}
+                    <div>
+                      <label className="block text-xs text-zinc-500 uppercase tracking-widest mb-2">
+                        Último salário
+                      </label>
+
+                      <input
+                        type="number"
+                        value={dadosTrabalhistas.salario}
+                        onChange={(e) =>
+                          setDadosTrabalhistas({
+                            ...dadosTrabalhistas,
+                            salario: e.target.value
+                          })
+                        }
+                        placeholder="Ex: 3000"
+                        className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-white outline-none focus:border-yellow-500"
+                      />
+                    </div>
+
+                  </div>
+                </div>
+              )}
               <p className="text-xs text-zinc-500 uppercase tracking-widest mb-2">Descreva os fatos do caso</p>
               <textarea
                 className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-sm text-zinc-100 h-36 resize-none"
